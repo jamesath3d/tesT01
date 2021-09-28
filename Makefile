@@ -9,8 +9,11 @@ endif
 dateX1:=$(shell LC_ALL=C date +%Y_%m%d_%H%M%P_%S )
 
 projName:=BlinkLED_MSP430FR2433_03
+projName:=u2
 
-dstDir01:=~/workspace_v10/$(projName)/
+# dstDir01:=~/workspace_v10/$(projName)/
+dstDir01:=$(shell realpath $(projName)/)
+
 dstDir02:=$(shell realpath $(dstDir01))
 dstDir11:=$(dstDir02)/Debug
 dstDir12:=$(dstDir02)/Debug__GNU
@@ -19,7 +22,7 @@ dstDir21:=$(wildcard $(realpath $(dstDir11)))
 dstDir22:=$(wildcard $(realpath $(dstDir12)))
 dstDir23:=$(wildcard $(realpath $(dstDir13)))
 
-$(if $(dstDir23),,$(error "dstDir23 don't exit. exit"))
+$(if $(dstDir23),,$(error "dstDir23 don't exit. check <projName> and run again. Exit."))
 
 
 all:
@@ -125,6 +128,11 @@ gd :
 	cd $(dstDir01)/ && git diff
 gdd :
 	git diff
+
+up:
+	cd $(dstDir01)/ && git push -u origin main
+upp:
+	git push -u origin main
 
 
 # workspace_v10/$(projName)/

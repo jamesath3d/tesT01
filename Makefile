@@ -30,8 +30,10 @@ all:
 
 wwa:=ww1 ww2 ww3
 bba:= ba1 ba2 ba3
+w2la:= w2l1 w2l2 w2l3
 wwa:$(wwa)
 bba:$(bba)
+w2la:$(w2la)
 
 ba1:=$(dstDir21)
 ba2:=$(dstDir22)
@@ -46,6 +48,13 @@ ww3:=$(dstDir23)
 ww1:$(ww1)
 ww2:$(ww2)
 ww3:$(ww3)
+
+w2l1:=$(dstDir21)
+w2l2:=$(dstDir22)
+w2l3:=$(dstDir23)
+w2l1:$(w2l1)
+w2l2:$(w2l2)
+w2l3:$(w2l3)
 
 #	(cd $< && make) > log.$(shell echo $<|tr './' '__'|sed -e 's;^_\+;;g' -e 's;__\+;_;g' ).txt
 ba1 ba2 ba3 :
@@ -81,6 +90,18 @@ ww1 ww2 ww3 :
 		&& echo && cat $${dd1}|sed -e '1,3d' -e '/^*[\/ -\|]*$$/d' \
 		&& echo   "make on ($@ ,$< == $(projName).txt == ) succeed" \
 		|| ( echo "make on ($@ ,$< == $(projName).txt == ) error" ; exit 31) ; \
+
+w2lfile:=objects.mk  sources.mk  subdir_rules.mk  subdir_vars.mk makefile
+w2l1 w2l2 w2l3 :
+	cd $< && \
+		dos2unix $(w2lfile)
+	cd $< && \
+		sed -i \
+		-e 's;\bC:/ti/energia;/home/ti/ti/energia/;g' \
+		-e 's;^SHELL\b;\#SHELL;g' \
+		-e 's;^RM\b.*$$;RM := rm -fr ;g' \
+		-e 's;^RMDIR\b.*$$;RMDIR := rm -fr ;g' \
+		$(w2lfile)
 
 ca: 
 	cd $(dstDir02) && rm -f ` \
@@ -177,6 +198,8 @@ wwa: msp430flash all : $(wwa)
 ww1: msp430flash in directory $(ww1)
 ww2: msp430flash in directory $(ww2)
 ww3: msp430flash in directory $(ww3)
+
+w2la: win to linux all : $(w2la)
 
 endef
 export helpText
